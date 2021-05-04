@@ -20,15 +20,25 @@
     var CONFIG = {"hostname":"daniellee3806.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="單你噁">
-<meta property="og:url" content="https://daniellee3806.github.io/archives/2021/02/index.html">
+  <meta name="description" content="紀錄一下最近將DateTime Tick在Redis lua比較遇到一個問題，團隊使用的Redis版本為6.0.8、Lua版本為5.1，   Lua 5.1 Integer最大值為2^52，Date time Tick長度遠超過2^52導致字串轉為數字時被加上科學記號，   5.3後才支援64位元的Integer。   傻瓜如我本來想Trim左邊三個位數但是被大神打槍，最後改為直接比較字串， 由於">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Max-Integer-In-Redis-Lua">
+<meta property="og:url" content="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/index.html">
 <meta property="og:site_name" content="單你噁">
+<meta property="og:description" content="紀錄一下最近將DateTime Tick在Redis lua比較遇到一個問題，團隊使用的Redis版本為6.0.8、Lua版本為5.1，   Lua 5.1 Integer最大值為2^52，Date time Tick長度遠超過2^52導致字串轉為數字時被加上科學記號，   5.3後才支援64位元的Integer。   傻瓜如我本來想Trim左邊三個位數但是被大神打槍，最後改為直接比較字串， 由於">
 <meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/tick.PNG">
+<meta property="og:image" content="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/lua.PNG">
+<meta property="og:image" content="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/5.3.PNG">
+<meta property="article:published_time" content="2021-05-04T16:51:23.000Z">
+<meta property="article:modified_time" content="2021-05-04T17:10:20.517Z">
 <meta property="article:author" content="單你噁">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="lua">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/tick.PNG">
 
-<link rel="canonical" href="https://daniellee3806.github.io/archives/2021/02/">
+<link rel="canonical" href="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/">
 
 
 <script id="page-configurations">
@@ -36,12 +46,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-TW'
   };
 </script>
 
-  <title>歸檔 | 單你噁</title>
+  <title>Max-Integer-In-Redis-Lua | 單你噁</title>
   
 
 
@@ -139,96 +149,119 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="單你噁">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="單你噁">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Max-Integer-In-Redis-Lua
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2021-05-05 00:51:23 / 修改時間：01:10:20" itemprop="dateCreated datePublished" datetime="2021-05-05T00:51:23+08:00">2021-05-05</time>
+            </span>
+
+          
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共有 4 篇文章。 繼續努力。</span>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/05/05/Max-Integer-In-Redis-Lua/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/05/05/Max-Integer-In-Redis-Lua/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
-    </div>
+        <p>紀錄一下最近將DateTime Tick在Redis lua比較遇到一個問題，團隊使用的Redis版本為6.0.8、Lua版本為5.1，</p>
+<img src="/2021/05/05/Max-Integer-In-Redis-Lua/tick.PNG" class="">
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<p>Lua 5.1 Integer最大值為2^52，Date time Tick長度遠超過2^52導致字串轉為數字時被加上科學記號，</p>
+<img src="/2021/05/05/Max-Integer-In-Redis-Lua/lua.PNG" class="">
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-02-19T23:59:15+08:00"
-              content="2021-02-19">
-          02-19
-        </time>
-      </div>
+<p>5.3後才支援64位元的Integer。</p>
+<img src="/2021/05/05/Max-Integer-In-Redis-Lua/5.3.PNG" class="">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/02/19/test3/" itemprop="url">
-            <span itemprop="name">test3</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-02-19T00:45:01+08:00"
-              content="2021-02-19">
-          02-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/02/19/test2/" itemprop="url">
-            <span itemprop="name">test2</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-02-18T23:36:25+08:00"
-              content="2021-02-18">
-          02-18
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/02/18/test/" itemprop="url">
-            <span itemprop="name">test</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+<p>傻瓜如我本來想Trim左邊三個位數但是被大神打槍，最後改為直接比較字串，</p>
+<p>由於字串比較大小是由左而右，比較字串的ASCII Code，所以需多判斷長度，長度較長且ASCII Code較大的的字串在數字比對時也會比較大。</p>
+<p>參考網址:<br><a target="_blank" rel="noopener" href="https://tickstodatetime.azurewebsites.net/">https://tickstodatetime.azurewebsites.net/</a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A7%91%E5%AD%A6%E8%AE%B0%E6%95%B0%E6%B3%95">https://zh.wikipedia.org/wiki/%E7%A7%91%E5%AD%A6%E8%AE%B0%E6%95%B0%E6%B3%95</a><br><a target="_blank" rel="noopener" href="https://replit.com/languages/lua">https://replit.com/languages/lua</a><br><a target="_blank" rel="noopener" href="https://www.lua.org/versions.html">https://www.lua.org/versions.html</a></p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/redis/" rel="tag"># redis</a>
+              <a href="/tags/lua/" rel="tag"># lua</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/19/test3/" rel="prev" title="test3">
+      <i class="fa fa-chevron-left"></i> test3
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
 
           </div>
           
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -388,6 +421,26 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/";
+    this.page.identifier = "2021/05/05/Max-Integer-In-Redis-Lua/";
+    this.page.title = "Max-Integer-In-Redis-Lua";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daniellee3806.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
 </body>

@@ -145,6 +145,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://daniellee3806.github.io/2021/05/05/Max-Integer-In-Redis-Lua/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="單你噁">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="單你噁">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/05/Max-Integer-In-Redis-Lua/" class="post-title-link" itemprop="url">Max-Integer-In-Redis-Lua</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2021-05-05 00:51:23 / 修改時間：01:10:20" itemprop="dateCreated datePublished" datetime="2021-05-05T00:51:23+08:00">2021-05-05</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/05/05/Max-Integer-In-Redis-Lua/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/05/05/Max-Integer-In-Redis-Lua/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>紀錄一下最近將DateTime Tick在Redis lua比較遇到一個問題，團隊使用的Redis版本為6.0.8、Lua版本為5.1，</p>
+<img src="/2021/05/05/Max-Integer-In-Redis-Lua/tick.PNG" class="">
+
+<p>Lua 5.1 Integer最大值為2^52，Date time Tick長度遠超過2^52導致字串轉為數字時被加上科學記號，</p>
+<img src="/2021/05/05/Max-Integer-In-Redis-Lua/lua.PNG" class="">
+
+<p>5.3後才支援64位元的Integer。</p>
+<img src="/2021/05/05/Max-Integer-In-Redis-Lua/5.3.PNG" class="">
+
+<p>傻瓜如我本來想Trim左邊三個位數但是被大神打槍，最後改為直接比較字串，</p>
+<p>由於字串比較大小是由左而右，比較字串的ASCII Code，所以需多判斷長度，長度較長且ASCII Code較大的的字串在數字比對時也會比較大。</p>
+<p>參考網址:<br><a target="_blank" rel="noopener" href="https://tickstodatetime.azurewebsites.net/">https://tickstodatetime.azurewebsites.net/</a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A7%91%E5%AD%A6%E8%AE%B0%E6%95%B0%E6%B3%95">https://zh.wikipedia.org/wiki/%E7%A7%91%E5%AD%A6%E8%AE%B0%E6%95%B0%E6%B3%95</a><br><a target="_blank" rel="noopener" href="https://replit.com/languages/lua">https://replit.com/languages/lua</a><br><a target="_blank" rel="noopener" href="https://www.lua.org/versions.html">https://www.lua.org/versions.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://daniellee3806.github.io/2021/02/19/test3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -442,14 +526,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
